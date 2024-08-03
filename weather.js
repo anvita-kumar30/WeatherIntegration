@@ -5,7 +5,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to fetch weather data
     function fetchWeather(lat, lon) {
         fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
             .then(data => {
                 displayWeather(data);
             })
@@ -14,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to display weather data
     function displayWeather(data) {
+        console.log(data); // Log data to see what is returned
         const temp = data.main.temp;
         const icon = `http://openweathermap.org/img/wn/${data.weather[0].icon}.png`;
         const description = data.weather[0].description;
@@ -35,8 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
             navigator.geolocation.getCurrentPosition(position => {
                 const lat = position.coords.latitude;
                 const lon = position.coords.longitude;
+                console.log(`Latitude: ${lat}, Longitude: ${lon}`); // Log the coordinates
                 fetchWeather(lat, lon);
-            }, () => {
+            }, error => {
+                console.error('Error getting location:', error);
                 weatherContainer.textContent = 'Unable to retrieve your location';
             });
         } else {
