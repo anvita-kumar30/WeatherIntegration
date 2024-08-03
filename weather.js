@@ -2,6 +2,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const weatherContainer = document.getElementById('weather');
     const apiKey = '1b4efd18e5017bdeef0f38b6b7fc3dfe'; // Your OpenWeatherMap API key
 
+    // Static coordinates for testing
+    const lat = 35;  // Example latitude
+    const lon = 139; // Example longitude
+    
     // Function to fetch weather data
     function fetchWeather(lat, lon) {
         fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`)
